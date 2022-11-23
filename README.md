@@ -2,6 +2,13 @@
 
 Rest Spring Boot app
 
+## Tech Stack
+
+- Java 11
+- Spring Boot
+- H2 Database
+- Swagger2
+
 ## Requirements
 
 For building and running the application you need:
@@ -20,6 +27,10 @@ the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/r
 ```shell
 mvn spring-boot:run
 ```
+
+## Test Data
+
+### Brands
 
 ## Swagger
 

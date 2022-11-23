@@ -1,4 +1,4 @@
-package com.mghr4937.demo.model;
+package com.mghr4937.demo.models;
 
 import lombok.*;
 import org.hibernate.Hibernate;

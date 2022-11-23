@@ -1,4 +1,4 @@
-package com.mghr4937.demo.swagger2;
+package com.mghr4937.demo.configurations;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,23 +6,20 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
 @Configuration
+@EnableSwagger2
 @Import(SpringDataRestConfiguration.class)
 public class SwaggerConfig {
 
@@ -33,7 +30,6 @@ public class SwaggerConfig {
     public static final String EMAIL = "mghr4937@gmail.com";
     public static final String LICENSE = "Apache 2.0";
     public static final String LICENSE_URL = "http://springdoc.org";
-    public static final String BASE_PACKAGE = "com.mghr4937.demo.repository";
     @Autowired
     private BuildProperties buildProperties;
 
@@ -42,9 +38,9 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.mghr4937.demo"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build().tags(new Tag("Brands Entity", "Repository for Brand entity"));
+                .build();
     }
 
     private ApiInfo getApiInfo() {

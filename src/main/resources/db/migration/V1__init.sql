@@ -1,0 +1,8 @@
+CREATE TABLE brand (
+  id BIGINT AUTO_INCREMENT NOT NULL,
+   name CLOB,
+   CONSTRAINT pk_brand PRIMARY KEY (id)
+);
+
+INSERT INTO brand (name) VALUES ('ZARA');
+INSERT INTO brand (name) VALUES ('ZARA HOME');

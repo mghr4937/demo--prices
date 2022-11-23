@@ -20,3 +20,11 @@ the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/r
 ```shell
 mvn spring-boot:run
 ```
+
+## Swagger
+
+[http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
+
+## Actuator
+
+[http://localhost:9095/](http://localhost:9095/)

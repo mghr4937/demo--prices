@@ -12,6 +12,8 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "brand")
 public class Brand {
     @Id

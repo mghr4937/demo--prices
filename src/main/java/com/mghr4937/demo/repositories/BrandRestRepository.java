@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Api(tags = "Brand Entity")
 @Repository
-public interface BrandRepository extends CrudRepository<Brand, Long> {
+public interface BrandRestRepository extends CrudRepository<Brand, Long> {
+
 }

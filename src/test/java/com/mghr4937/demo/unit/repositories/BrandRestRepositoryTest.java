@@ -25,9 +25,10 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 })
 public class BrandRestRepositoryTest {
 
-    public static final String BRAND = "TEST BRAND";
+    private static final String BRAND = "TEST BRAND";
+
     @Autowired
-    BrandRestRepository repository;
+    private BrandRestRepository repository;
 
     @Test
     public void testSave() throws Exception {
@@ -44,9 +45,19 @@ public class BrandRestRepositoryTest {
     @Test
     public void testFindById() throws Exception {
         var brand = getBrand(BRAND);
+
         Brand result = repository.findById(brand.getId()).orElseThrow();
         assertNotNull(brand);
         assertEquals(brand.getId(), result.getId());
+    }
+
+    @Test
+    public void testFindByName() throws Exception {
+        var brand = getBrand(BRAND);
+
+        Brand result = repository.findByName(brand.getName());
+        assertNotNull(brand);
+        assertEquals(brand.getName(), result.getName());
     }
 
     @Test

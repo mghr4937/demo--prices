@@ -3,8 +3,13 @@ package com.mghr4937.demo.models;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import java.util.Objects;
 
 @Getter
@@ -23,6 +28,8 @@ public class Brand {
 
     @Column(name = "name")
     @Type(type = "org.hibernate.type.TextType")
+    @Length(min = 3, max = 255)
+    @NotNull
     private String name;
 
     @Override

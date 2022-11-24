@@ -1,4 +1,4 @@
-package com.mghr4937.demo.controllers.error;
+package com.mghr4937.demo.web.controller.error.handler;
 
 import lombok.Builder;
 import lombok.Data;

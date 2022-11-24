@@ -1,5 +1,6 @@
-package com.mghr4937.demo.models;
+package com.mghr4937.demo.web.dto;
 
+import com.mghr4937.demo.model.Brand;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import java.io.Serializable;

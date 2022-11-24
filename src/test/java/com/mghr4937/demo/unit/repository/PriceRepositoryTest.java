@@ -1,8 +1,8 @@
-package com.mghr4937.demo.unit.repositories;
+package com.mghr4937.demo.unit.repository;
 
-import com.mghr4937.demo.models.Price;
-import com.mghr4937.demo.repositories.BrandRepository;
-import com.mghr4937.demo.repositories.PriceRepository;
+import com.mghr4937.demo.model.Price;
+import com.mghr4937.demo.repository.BrandRepository;
+import com.mghr4937.demo.repository.PriceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -77,6 +77,8 @@ public class PriceRepositoryTest {
                 .price(85.50)
                 .currency(Currency.getInstance("EUR"))
                 .build();
+
+
         return priceRepository.save(price);
     }
 }

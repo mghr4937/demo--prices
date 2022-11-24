@@ -1,14 +1,16 @@
-package com.mghr4937.demo.unit.repositories;
+package com.mghr4937.demo.unit.repository;
 
-import com.mghr4937.demo.models.Brand;
-import com.mghr4937.demo.repositories.BrandRepository;
+import com.mghr4937.demo.model.Brand;
+import com.mghr4937.demo.repository.BrandRepository;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,9 +46,9 @@ public class BrandRepositoryTest {
     public void testFindByName() throws Exception {
         var brand = createBrand(BRAND);
 
-        Brand result = repository.findByName(brand.getName());
+        Optional<Brand> result = repository.findByName(brand.getName());
         assertNotNull(brand);
-        assertEquals(brand.getName(), result.getName());
+        assertEquals(brand.getName(), result.get().getName());
     }
 
     @Test

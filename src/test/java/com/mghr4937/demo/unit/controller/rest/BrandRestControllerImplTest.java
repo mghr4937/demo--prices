@@ -1,7 +1,7 @@
-package com.mghr4937.demo.integration;
+package com.mghr4937.demo.unit.controller.rest;
 
-import com.mghr4937.demo.models.Brand;
-import com.mghr4937.demo.repositories.BrandRepository;
+import com.mghr4937.demo.model.Brand;
+import com.mghr4937.demo.repository.BrandRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,23 +18,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class BrandRepositoryIntegrationTest {
+public class BrandRestControllerImplTest {
     private static final String BRAND = "TEST BRAND";
-    private static final String URL = "/brands";
+    private static final String URL = "/api/brand";
     private static final String BRAND_JSON = "{\"name\":\"BrandName\"}";
     private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
     @Autowired
     BrandRepository repository;
-
     @Autowired
     private MockMvc mvc;
+
 
     @Test
     public void whenPostBrand_thenReturn200() throws Exception {
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BRAND_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         mvc.perform(get(URL.concat("/search/findByName?name=BrandName"))
                         .contentType(MediaType.APPLICATION_JSON))

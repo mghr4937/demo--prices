@@ -1,4 +1,4 @@
-package com.mghr4937.demo.models;
+package com.mghr4937.demo.model;
 
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -39,4 +39,6 @@ public class Brand {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
 }

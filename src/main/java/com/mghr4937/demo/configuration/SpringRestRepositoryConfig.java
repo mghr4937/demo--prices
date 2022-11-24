@@ -1,6 +1,6 @@
-package com.mghr4937.demo.configurations;
+package com.mghr4937.demo.configuration;
 
-import com.mghr4937.demo.models.Brand;
+import com.mghr4937.demo.model.Brand;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;

@@ -1,9 +1,9 @@
 package com.mghr4937.demo;
 
-import com.mghr4937.demo.models.Brand;
-import com.mghr4937.demo.models.Price;
-import com.mghr4937.demo.repositories.BrandRepository;
-import com.mghr4937.demo.repositories.PriceRepository;
+import com.mghr4937.demo.model.Brand;
+import com.mghr4937.demo.model.Price;
+import com.mghr4937.demo.repository.BrandRepository;
+import com.mghr4937.demo.repository.PriceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Currency;
 
 @Slf4j
@@ -33,9 +34,9 @@ public class DemoApplication {
             var brand = brandRepository.save(Brand.builder().name("ZARA").build());
             brandRepository.save(Brand.builder().name("ZARA HOME").build());
             brandRepository.save(Brand.builder().name("ZARA KIDS").build());
+            var prices = new ArrayList<Price>();
 
-
-            var price = Price.builder().brandId(brand)
+            prices.add(Price.builder().brandId(brand)
                     .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0, 0))
                     .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
                     .priceList(1)
@@ -43,8 +44,39 @@ public class DemoApplication {
                     .priority(0)
                     .price(35.50)
                     .currency(Currency.getInstance("EUR"))
-                    .build();
-            priceRepository.save(price);
+                    .build());
+
+            prices.add(Price.builder().brandId(brand)
+                    .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 15, 0, 0))
+                    .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 18, 30, 0))
+                    .priceList(2)
+                    .productId(35455)
+                    .priority(1)
+                    .price(25.45)
+                    .currency(Currency.getInstance("EUR"))
+                    .build());
+
+            prices.add(Price.builder().brandId(brand)
+                    .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 0, 0, 0))
+                    .endDate(LocalDateTime.of(2020, Month.JUNE, 15, 11, 0, 0))
+                    .priceList(3)
+                    .productId(35455)
+                    .priority(1)
+                    .price(30.50)
+                    .currency(Currency.getInstance("EUR"))
+                    .build());
+
+            prices.add(Price.builder().brandId(brand)
+                    .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 16, 0, 0))
+                    .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
+                    .priceList(4)
+                    .productId(35455)
+                    .priority(1)
+                    .price(38.95)
+                    .currency(Currency.getInstance("EUR"))
+                    .build());
+
+            priceRepository.saveAll(prices);
         };
     }
 

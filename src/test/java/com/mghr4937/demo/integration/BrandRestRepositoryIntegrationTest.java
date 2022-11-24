@@ -1,4 +1,4 @@
-package com.mghr4937.demo.unit.controllers.rest;
+package com.mghr4937.demo.integration;
 
 import com.mghr4937.demo.models.Brand;
 import com.mghr4937.demo.repositories.BrandRestRepository;
@@ -21,7 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BrandRestRepositoryIntegrationTest {
     private static final String BRAND = "TEST BRAND";
     private static final String URL = "/brands";
-
+    private static final String BRAND_JSON = "{\"name\":\"BrandName\"}";
+    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
     @Autowired
     BrandRestRepository repository;
 
@@ -30,18 +31,25 @@ public class BrandRestRepositoryIntegrationTest {
 
     @Test
     public void whenPostBrand_thenReturn200() throws Exception {
-        var brand = getBrand(BRAND);
+        mvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(BRAND_JSON))
+                .andExpect(status().isCreated());
 
-        mvc.perform(post(URL.concat("/99"))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-
-        mvc.perform(get(URL.concat("/" + brand.getId()))
+        mvc.perform(get(URL.concat("/search/findByName?name=BrandName"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id").value(brand.getId()))
-                .andExpect(jsonPath("$.name").value(brand.getName()));
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.name").value("BrandName"));
+    }
+
+    @Test
+    public void whenPostBrandWithEmptyName_thenReturn422() throws Exception {
+        mvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(BRAND_EMPTY_NAME_JSON))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

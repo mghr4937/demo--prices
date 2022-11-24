@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BrandRestRepository extends JpaRepository<Brand, Long> {
     public Brand findByName(String name);
+
+
 }

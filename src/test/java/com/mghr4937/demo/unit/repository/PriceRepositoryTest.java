@@ -26,16 +26,16 @@ public class PriceRepositoryTest {
     @Autowired
     PriceRepository priceRepository;
     @Autowired
-    private BrandRepository branRestRepository;
+    private BrandRepository brandRepository;
 
     @Test
     public void testSave() throws Exception {
-        var brand = createPrice();
+        var price = createPrice();
 
         var pricesIterable = priceRepository.findAll();
-        List<Price> brandsList = new ArrayList<>(pricesIterable);
+        List<Price> pricesList = new ArrayList<>(pricesIterable);
 
-        assertTrue(brandsList.contains(brand));
+        assertTrue(pricesList.contains(price));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class PriceRepositoryTest {
 
         List<Price> result = new ArrayList<>();
         result.addAll(priceRepository.findAll());
-        assertEquals(2, result.size());
+        assertEquals(5, result.size());
     }
 
     @Test
@@ -63,11 +63,11 @@ public class PriceRepositoryTest {
         priceRepository.deleteById(price.getId());
         List<Price> result = new ArrayList<>();
         result.addAll(priceRepository.findAll());
-        assertEquals(1, result.size());
+        assertEquals(4, result.size());
     }
 
     private Price createPrice() {
-        var brand = branRestRepository.getReferenceById(1L);
+        var brand = brandRepository.getReferenceById(1L);
         var price = Price.builder().brandId(brand)
                 .startDate(LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0))
                 .endDate(LocalDateTime.of(2022, Month.MARCH, 31, 23, 59, 59))

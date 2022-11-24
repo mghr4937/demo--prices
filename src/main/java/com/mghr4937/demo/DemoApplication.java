@@ -28,57 +28,7 @@ public class DemoApplication {
         log.info("Demo started successfully.");
     }
 
-    @Bean
-    public CommandLineRunner createDemoDataIfNeeded(BrandRepository brandRepository, PriceRepository priceRepository) {
-        return args -> {
-            var brand = brandRepository.save(Brand.builder().name("ZARA").build());
-            brandRepository.save(Brand.builder().name("ZARA HOME").build());
-            brandRepository.save(Brand.builder().name("ZARA KIDS").build());
-            var prices = new ArrayList<Price>();
 
-            prices.add(Price.builder().brandId(brand)
-                    .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0, 0))
-                    .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
-                    .priceList(1)
-                    .productId(35455)
-                    .priority(0)
-                    .price(35.50)
-                    .currency(Currency.getInstance("EUR"))
-                    .build());
-
-            prices.add(Price.builder().brandId(brand)
-                    .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 15, 0, 0))
-                    .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 18, 30, 0))
-                    .priceList(2)
-                    .productId(35455)
-                    .priority(1)
-                    .price(25.45)
-                    .currency(Currency.getInstance("EUR"))
-                    .build());
-
-            prices.add(Price.builder().brandId(brand)
-                    .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 0, 0, 0))
-                    .endDate(LocalDateTime.of(2020, Month.JUNE, 15, 11, 0, 0))
-                    .priceList(3)
-                    .productId(35455)
-                    .priority(1)
-                    .price(30.50)
-                    .currency(Currency.getInstance("EUR"))
-                    .build());
-
-            prices.add(Price.builder().brandId(brand)
-                    .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 16, 0, 0))
-                    .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
-                    .priceList(4)
-                    .productId(35455)
-                    .priority(1)
-                    .price(38.95)
-                    .currency(Currency.getInstance("EUR"))
-                    .build());
-
-            priceRepository.saveAll(prices);
-        };
-    }
 
 
 }

@@ -20,6 +20,7 @@ public class BrandRestControllerImpl implements BrandRestController {
 
     @Override
     public List<Brand> getAll() {
+
         return repository.findAll();
     }
 
@@ -30,21 +31,18 @@ public class BrandRestControllerImpl implements BrandRestController {
 
     @Override
     public Brand getBrand(@PathVariable Long id) {
-
         return repository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public Brand getBrandByName(@Param("name") String name) {
-
         return repository.findByName(name)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public Brand replaceBrand(@RequestBody Brand newBrand, @PathVariable Long id) {
-
         return repository.findById(id)
                 .map(brand -> {
                     brand.setName(newBrand.getName());

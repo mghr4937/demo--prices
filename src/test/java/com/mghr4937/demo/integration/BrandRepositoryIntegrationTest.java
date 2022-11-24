@@ -1,7 +1,7 @@
 package com.mghr4937.demo.integration;
 
 import com.mghr4937.demo.models.Brand;
-import com.mghr4937.demo.repositories.BrandRestRepository;
+import com.mghr4937.demo.repositories.BrandRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,13 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class BrandRestRepositoryIntegrationTest {
+public class BrandRepositoryIntegrationTest {
     private static final String BRAND = "TEST BRAND";
     private static final String URL = "/brands";
     private static final String BRAND_JSON = "{\"name\":\"BrandName\"}";
     private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
     @Autowired
-    BrandRestRepository repository;
+    BrandRepository repository;
 
     @Autowired
     private MockMvc mvc;

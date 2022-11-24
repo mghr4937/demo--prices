@@ -1,7 +1,7 @@
 package com.mghr4937.demo.unit.repositories;
 
 import com.mghr4937.demo.models.Brand;
-import com.mghr4937.demo.repositories.BrandRestRepository;
+import com.mghr4937.demo.repositories.BrandRepository;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,23 +9,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class BrandRestRepositoryTest {
+public class BrandRepositoryTest {
 
     private static final String BRAND = "TEST BRAND";
 
     @Autowired
-    private BrandRestRepository repository;
+    private BrandRepository repository;
 
     @Test
     public void testSave() throws Exception {
-        var brand = getBrand(BRAND);
+        var brand = createBrand(BRAND);
 
         var brandsIterable = repository.findAll();
         List<Brand> brandsList = new ArrayList<>(brandsIterable);
@@ -35,7 +33,7 @@ public class BrandRestRepositoryTest {
 
     @Test
     public void testFindById() throws Exception {
-        var brand = getBrand(BRAND);
+        var brand = createBrand(BRAND);
 
         Brand result = repository.findById(brand.getId()).orElseThrow();
         assertNotNull(brand);
@@ -44,7 +42,7 @@ public class BrandRestRepositoryTest {
 
     @Test
     public void testFindByName() throws Exception {
-        var brand = getBrand(BRAND);
+        var brand = createBrand(BRAND);
 
         Brand result = repository.findByName(brand.getName());
         assertNotNull(brand);
@@ -53,7 +51,7 @@ public class BrandRestRepositoryTest {
 
     @Test
     public void testFindAll() throws Exception {
-        var brand = getBrand(BRAND);
+        var brand = createBrand(BRAND);
 
         List<Brand> result = new ArrayList<>();
         result.addAll(repository.findAll());
@@ -62,7 +60,7 @@ public class BrandRestRepositoryTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        var brand = getBrand(BRAND);
+        var brand = createBrand(BRAND);
 
         repository.deleteById(brand.getId());
         List<Brand> result = new ArrayList<>();
@@ -70,7 +68,7 @@ public class BrandRestRepositoryTest {
         assertEquals(3, result.size());
     }
 
-    private Brand getBrand(String name) {
+    private Brand createBrand(String name) {
         return repository.save(Brand.builder()
                 .name(BRAND)
                 .build());

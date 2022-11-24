@@ -2,8 +2,8 @@ package com.mghr4937.demo;
 
 import com.mghr4937.demo.models.Brand;
 import com.mghr4937.demo.models.Price;
-import com.mghr4937.demo.repositories.BrandRestRepository;
-import com.mghr4937.demo.repositories.PriceRestRepository;
+import com.mghr4937.demo.repositories.BrandRepository;
+import com.mghr4937.demo.repositories.PriceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,11 +28,11 @@ public class DemoApplication {
     }
 
     @Bean
-    public CommandLineRunner createDemoDataIfNeeded(BrandRestRepository brandRestRepository, PriceRestRepository priceRestRepository) {
+    public CommandLineRunner createDemoDataIfNeeded(BrandRepository brandRepository, PriceRepository priceRepository) {
         return args -> {
-            var brand = brandRestRepository.save(Brand.builder().name("ZARA").build());
-            brandRestRepository.save(Brand.builder().name("ZARA HOME").build());
-            brandRestRepository.save(Brand.builder().name("ZARA KIDS").build());
+            var brand = brandRepository.save(Brand.builder().name("ZARA").build());
+            brandRepository.save(Brand.builder().name("ZARA HOME").build());
+            brandRepository.save(Brand.builder().name("ZARA KIDS").build());
 
 
             var price = Price.builder().brandId(brand)
@@ -44,7 +44,7 @@ public class DemoApplication {
                     .price(35.50)
                     .currency(Currency.getInstance("EUR"))
                     .build();
-            priceRestRepository.save(price);
+            priceRepository.save(price);
         };
     }
 

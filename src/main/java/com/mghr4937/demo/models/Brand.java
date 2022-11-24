@@ -6,8 +6,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import java.util.Objects;
 
 @Getter
@@ -24,10 +22,9 @@ public class Brand {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name")
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "name", nullable = false)
     @Length(min = 3, max = 255)
-    @NotNull
+    @Type(type = "org.hibernate.type.TextType")
     private String name;
 
     @Override

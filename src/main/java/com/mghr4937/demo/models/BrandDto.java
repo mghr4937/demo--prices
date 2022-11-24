@@ -1,10 +1,7 @@
-package com.mghr4937.demo.models.dto;
+package com.mghr4937.demo.models;
 
-import com.mghr4937.demo.models.Brand;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -14,6 +11,5 @@ import java.io.Serializable;
 public class BrandDto implements Serializable {
     private final Long id;
     @Length(min = 3, max = 255)
-    @NotNull
     private final String name;
 }

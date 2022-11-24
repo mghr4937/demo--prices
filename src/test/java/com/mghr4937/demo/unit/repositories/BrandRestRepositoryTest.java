@@ -6,23 +6,16 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @SpringBootTest
 @Transactional
-@SqlGroup({
-        @Sql(value = "classpath:test-data.sql", executionPhase = BEFORE_TEST_METHOD)
-})
 public class BrandRestRepositoryTest {
 
     private static final String BRAND = "TEST BRAND";
@@ -35,9 +28,7 @@ public class BrandRestRepositoryTest {
         var brand = getBrand(BRAND);
 
         var brandsIterable = repository.findAll();
-        List<Brand> brandsList = StreamSupport
-                .stream(brandsIterable.spliterator(), false)
-                .collect(Collectors.toList());
+        List<Brand> brandsList = new ArrayList<>(brandsIterable);
 
         assertTrue(brandsList.contains(brand));
     }
@@ -65,7 +56,7 @@ public class BrandRestRepositoryTest {
         var brand = getBrand(BRAND);
 
         List<Brand> result = new ArrayList<>();
-        repository.findAll().forEach(result::add);
+        result.addAll(repository.findAll());
         assertEquals(4, result.size());
     }
 
@@ -75,7 +66,7 @@ public class BrandRestRepositoryTest {
 
         repository.deleteById(brand.getId());
         List<Brand> result = new ArrayList<>();
-        repository.findAll().forEach(result::add);
+        result.addAll(repository.findAll());
         assertEquals(3, result.size());
     }
 

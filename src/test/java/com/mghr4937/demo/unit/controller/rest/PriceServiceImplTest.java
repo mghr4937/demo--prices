@@ -85,7 +85,7 @@ public class PriceServiceImplTest {
                 .priceList(1)
                 .productId(35455L)
                 .priority(0)
-                .price(85.50)
+                .price(85.50F)
                 .currency(Currency.getInstance(CURRENCY_CODE))
                 .build();
 

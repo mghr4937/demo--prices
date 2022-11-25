@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class PriceRepositoryTest {
-    private static String CURRENCY = "EUR";
+    private static final String CURRENCY = "EUR";
 
     @Autowired
     PriceRepository priceRepository;
@@ -87,7 +87,7 @@ public class PriceRepositoryTest {
                 .priceList(1)
                 .productId(35999L)
                 .priority(0)
-                .price(99.99)
+                .price(99.99F)
                 .currency(Currency.getInstance(CURRENCY))
                 .build();
 

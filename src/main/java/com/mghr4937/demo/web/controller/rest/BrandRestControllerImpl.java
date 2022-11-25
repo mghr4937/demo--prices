@@ -2,62 +2,66 @@ package com.mghr4937.demo.web.controller.rest;
 
 import com.mghr4937.demo.model.Brand;
 import com.mghr4937.demo.repository.BrandRepository;
-import com.mghr4937.demo.web.controller.BrandRestController;
+import com.mghr4937.demo.web.controller.IBrandRestController;
+import com.mghr4937.demo.web.dto.BrandDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.expression.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-public class BrandRestControllerImpl implements BrandRestController {
+public class BrandRestControllerImpl implements IBrandRestController {
 
     private final BrandRepository repository;
+    private final ModelMapper modelMapper;
 
-    BrandRestControllerImpl(BrandRepository repository) {
+    BrandRestControllerImpl(BrandRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<Brand> getAll() {
-
-        return repository.findAll();
+    public List<BrandDto> getAll() {
+        var brands = repository.findAll();
+        return brands.stream().map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Brand save(@RequestBody Brand newBrand) {
-        return repository.save(newBrand);
+    public BrandDto save(@RequestBody BrandDto newBrand) {
+        var brand = repository.save(convertToEntity(newBrand));
+        return convertToDto(brand);
     }
 
     @Override
-    public Brand getBrand(@PathVariable Long id) {
-        return repository.findById(id)
+    public BrandDto getBrand(@PathVariable Long id) {
+        var brand = repository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+        return convertToDto(brand);
     }
 
     @Override
-    public Brand getBrandByName(@Param("name") String name) {
-        return repository.findByName(name)
+    public BrandDto getBrandByName(@Param("name") String name) {
+        var brand = repository.findByName(name)
                 .orElseThrow(ResourceNotFoundException::new);
-    }
-
-    @Override
-    public Brand replaceBrand(@RequestBody Brand newBrand, @PathVariable Long id) {
-        return repository.findById(id)
-                .map(brand -> {
-                    brand.setName(newBrand.getName());
-                    brand.setId(newBrand.getId());
-                    return repository.save(brand);
-                })
-                .orElseGet(() -> {
-                    newBrand.setId(id);
-                    return repository.save(newBrand);
-                });
+        return convertToDto(brand);
     }
 
     @Override
     public void deleteBrand(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    private BrandDto convertToDto(Brand brand) {
+        return modelMapper.map(brand, BrandDto.class);
+    }
+
+    private Brand convertToEntity(BrandDto brandDto) throws ParseException {
+        return modelMapper.map(brandDto, Brand.class);
     }
 
 }

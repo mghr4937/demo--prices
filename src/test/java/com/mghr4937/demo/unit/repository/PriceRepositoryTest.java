@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class PriceRepositoryTest {
+    private static String CURRENCY = "EUR";
 
     @Autowired
     PriceRepository priceRepository;
@@ -68,14 +69,14 @@ public class PriceRepositoryTest {
 
     private Price createPrice() {
         var brand = brandRepository.getReferenceById(1L);
-        var price = Price.builder().brandId(brand)
+        var price = Price.builder().brand(brand)
                 .startDate(LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0))
                 .endDate(LocalDateTime.of(2022, Month.MARCH, 31, 23, 59, 59))
                 .priceList(1)
-                .productId(35455)
+                .productId(35999)
                 .priority(0)
-                .price(85.50)
-                .currency(Currency.getInstance("EUR"))
+                .price(99.99)
+                .currency(Currency.getInstance(CURRENCY))
                 .build();
 
 

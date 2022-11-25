@@ -32,7 +32,7 @@ public class LoadDatabaseConfiguration {
             log.info("Preloading Prices");
             var prices = new ArrayList<Price>();
 
-            prices.add(Price.builder().brandId(brands.get(0))
+            prices.add(Price.builder().brand(brands.get(0))
                     .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 0, 0, 0))
                     .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
                     .priceList(1)
@@ -42,7 +42,7 @@ public class LoadDatabaseConfiguration {
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
-            prices.add(Price.builder().brandId(brands.get(0))
+            prices.add(Price.builder().brand(brands.get(0))
                     .startDate(LocalDateTime.of(2020, Month.JUNE, 14, 15, 0, 0))
                     .endDate(LocalDateTime.of(2020, Month.JUNE, 14, 18, 30, 0))
                     .priceList(2)
@@ -52,7 +52,7 @@ public class LoadDatabaseConfiguration {
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
-            prices.add(Price.builder().brandId(brands.get(0))
+            prices.add(Price.builder().brand(brands.get(0))
                     .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 0, 0, 0))
                     .endDate(LocalDateTime.of(2020, Month.JUNE, 15, 11, 0, 0))
                     .priceList(3)
@@ -62,7 +62,7 @@ public class LoadDatabaseConfiguration {
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
-            prices.add(Price.builder().brandId(brands.get(0))
+            prices.add(Price.builder().brand(brands.get(0))
                     .startDate(LocalDateTime.of(2020, Month.JUNE, 15, 16, 0, 0))
                     .endDate(LocalDateTime.of(2020, Month.DECEMBER, 31, 23, 59, 59))
                     .priceList(4)

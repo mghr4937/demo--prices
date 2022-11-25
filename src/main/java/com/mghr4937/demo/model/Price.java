@@ -25,9 +25,9 @@ public class Price {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brandId;
+    private Brand brand;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;

@@ -1,27 +1,24 @@
 package com.mghr4937.demo.web.controller;
 
-import com.mghr4937.demo.model.Brand;
+import com.mghr4937.demo.web.dto.BrandDto;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/brand")
-public interface BrandRestController {
+public interface IBrandRestController {
     @GetMapping("")
-    List<Brand> getAll();
+    List<BrandDto> getAll();
 
     @PostMapping("")
-    public Brand save(@RequestBody Brand newBrand);
+    public BrandDto save(@RequestBody BrandDto newBrand);
 
     @GetMapping("/{id}")
-    public Brand getBrand(@PathVariable Long id);
+    public BrandDto getBrand(@PathVariable Long id);
 
     @GetMapping("/search/findByName")
-    public Brand getBrandByName(@Param("name") String name);
-
-    @PutMapping("/{id}")
-    public Brand replaceBrand(@RequestBody Brand newBrand, @PathVariable Long id);
+    public BrandDto getBrandByName(@Param("name") String name);
 
     @DeleteMapping("/{id}")
     public void deleteBrand(@PathVariable Long id);

@@ -12,20 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 public class BrandRepositoryTest {
 
-    private static final String BRAND = "TEST BRAND";
-
     @Autowired
     private BrandRepository repository;
 
     @Test
     public void testSave() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand();
 
         var brandsIterable = repository.findAll();
         List<Brand> brandsList = new ArrayList<>(brandsIterable);
@@ -35,7 +34,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindById() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand();
 
         Brand result = repository.findById(brand.getId()).orElseThrow();
         assertNotNull(brand);
@@ -44,7 +43,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindByName() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand();
 
         Optional<Brand> result = repository.findByName(brand.getName());
         assertNotNull(brand);
@@ -53,7 +52,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindAll() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand();
 
         List<Brand> result = new ArrayList<>();
         result.addAll(repository.findAll());
@@ -62,7 +61,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand();
 
         repository.deleteById(brand.getId());
         List<Brand> result = new ArrayList<>();
@@ -70,9 +69,9 @@ public class BrandRepositoryTest {
         assertEquals(3, result.size());
     }
 
-    private Brand createBrand(String name) {
+    private Brand createBrand() {
         return repository.save(Brand.builder()
-                .name(BRAND)
+                .name(randomAlphabetic(6))
                 .build());
     }
 

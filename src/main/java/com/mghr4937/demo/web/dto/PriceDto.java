@@ -1,10 +1,10 @@
 package com.mghr4937.demo.web.dto;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Currency;
 
@@ -13,14 +13,32 @@ import java.util.Currency;
  */
 @Data
 public class PriceDto {
+    @ApiModelProperty(example = "1")
     private Long id;
+
     private BrandDto brand;
+
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+    @ApiModelProperty(required = true, value = "yyyy-MM-dd-HH:mm:ss", example = "2022-06-01-00:00:00")
     private LocalDateTime startDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+    @ApiModelProperty(required = true, value = "yyyy-MM-dd-HH:mm:ss", example = "2022-06-01-00:00:00")
     private LocalDateTime endDate;
+
+    @ApiModelProperty(example = "1")
     private int priceList;
+
+    @ApiModelProperty(example = "ZARA")
     private long productId;
+
+    @ApiModelProperty(example = "1")
     private int priority;
-    private double price;
+
+    @ApiModelProperty(example = "99.99")
+    private Float price;
+
     @Length(max = 3)
+    @ApiModelProperty(example = "EUR")
     private Currency currency;
 }

@@ -6,11 +6,12 @@ import com.mghr4937.demo.web.controller.IPriceRestController;
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.expression.ParseException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -49,10 +50,13 @@ public class PriceRestControllerImpl implements IPriceRestController {
     }
 
     @Override
-    public QueryPriceResponseDto getQueryPrice(@Param("date") LocalDateTime date, @Param("productId") Long productId, @Param("brandId") Long brandId) {
+    public QueryPriceResponseDto getQueryPrice(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss") LocalDateTime date,
+                                               @RequestParam("productId") Long productId,
+                                               @RequestParam("brandId") Long brandId) {
         var price = repository.queryPrice(date, productId, brandId)
                 .orElseThrow(ResourceNotFoundException::new);
         return convertToQueryPriceResponseDto(price);
+
     }
 
     @Override

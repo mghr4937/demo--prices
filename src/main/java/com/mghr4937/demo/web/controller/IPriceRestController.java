@@ -2,7 +2,8 @@ package com.mghr4937.demo.web.controller;
 
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
-import org.springframework.data.repository.query.Param;
+import io.swagger.annotations.ApiParam;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,9 @@ public interface IPriceRestController {
     public void deleteBrand(@PathVariable Long id);
 
     @GetMapping("/queryPrice")
-    public QueryPriceResponseDto getQueryPrice(@Param("date") LocalDateTime date, @Param("productId") Long productId, @Param("brandId") Long brandId);
+    public QueryPriceResponseDto getQueryPrice(@ApiParam(value = "yyyy-MM-dd HH:mm:ss", example = "2022-06-01 00:00:00")
+                                               @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss") @RequestParam("date") LocalDateTime date,
+                                               @RequestParam("productId") Long productId,
+                                               @RequestParam("brandId") Long brandId);
 
 }

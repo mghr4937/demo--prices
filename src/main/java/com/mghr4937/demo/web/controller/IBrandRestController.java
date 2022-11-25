@@ -18,7 +18,7 @@ public interface IBrandRestController {
     public BrandDto getBrand(@PathVariable Long id);
 
     @GetMapping("/search/findByName")
-    public BrandDto getBrandByName(@Param("name") String name);
+    public BrandDto getBrandByName(@RequestParam("name") String name);
 
     @DeleteMapping("/{id}")
     public void deleteBrand(@PathVariable Long id);

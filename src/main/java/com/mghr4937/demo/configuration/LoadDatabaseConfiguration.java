@@ -38,7 +38,7 @@ public class LoadDatabaseConfiguration {
                     .priceList(1)
                     .productId(35455L)
                     .priority(0)
-                    .price(35.50)
+                    .price(35.50F)
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
@@ -48,7 +48,7 @@ public class LoadDatabaseConfiguration {
                     .priceList(2)
                     .productId(35455L)
                     .priority(1)
-                    .price(25.45)
+                    .price(25.45F)
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
@@ -58,7 +58,7 @@ public class LoadDatabaseConfiguration {
                     .priceList(3)
                     .productId(35455L)
                     .priority(1)
-                    .price(30.50)
+                    .price(30.50F)
                     .currency(Currency.getInstance("EUR"))
                     .build());
 
@@ -68,7 +68,7 @@ public class LoadDatabaseConfiguration {
                     .priceList(4)
                     .productId(35455L)
                     .priority(1)
-                    .price(38.95)
+                    .price(38.95F)
                     .currency(Currency.getInstance("EUR"))
                     .build());
 

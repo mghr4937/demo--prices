@@ -5,6 +5,7 @@ import com.mghr4937.demo.repository.BrandRepository;
 import com.mghr4937.demo.web.controller.IBrandRestController;
 import com.mghr4937.demo.web.dto.BrandDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.expression.ParseException;
@@ -19,6 +20,7 @@ public class BrandRestControllerImpl implements IBrandRestController {
     private final BrandRepository repository;
     private final ModelMapper modelMapper;
 
+    @Autowired
     BrandRestControllerImpl(BrandRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
         this.modelMapper = modelMapper;

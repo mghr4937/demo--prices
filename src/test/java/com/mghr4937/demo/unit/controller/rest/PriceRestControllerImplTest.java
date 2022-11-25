@@ -27,21 +27,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class PriceServiceImplTest {
+public class PriceRestControllerImplTest {
     private static final String URL = "/api/price";
     public static final String CURRENCY_CODE = "EUR";
     private static final String PRICE_JSON = "{\"brand\":{\"id\":1,\"name\":\"ZARA\"},\"currency\":\"EUR\",\"" +
-            "endDate\":\"2022-11-25T00:12:32.966Z\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30.000Z\"}";
+            "endDate\":\"2022-11-25-00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
+            "\"productId\":0,\"startDate\":\"2022-11-25-00:15:30\"}";
 
+    private final PriceRepository priceRepository;
+    private final BrandRepository brandRepository;
+
+    private final MockMvc mvc;
 
     @Autowired
-    PriceRepository priceRepository;
-    @Autowired
-    BrandRepository brandRepository;
-
-    @Autowired
-    private MockMvc mvc;
+    public PriceRestControllerImplTest(PriceRepository priceRepository, BrandRepository brandRepository, MockMvc mvc) {
+        this.priceRepository = priceRepository;
+        this.brandRepository = brandRepository;
+        this.mvc = mvc;
+    }
 
     @Test
     public void whenPostPrice_thenReturn200() throws Exception {

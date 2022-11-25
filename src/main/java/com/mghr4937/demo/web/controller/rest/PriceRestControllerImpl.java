@@ -6,6 +6,7 @@ import com.mghr4937.demo.web.controller.IPriceRestController;
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.expression.ParseException;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,6 +25,7 @@ public class PriceRestControllerImpl implements IPriceRestController {
     private final PriceRepository repository;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public PriceRestControllerImpl(PriceRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
         this.modelMapper = modelMapper;

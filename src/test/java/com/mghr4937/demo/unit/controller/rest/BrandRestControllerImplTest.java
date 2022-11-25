@@ -8,6 +8,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +23,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class BrandServiceImplTest {
+public class BrandRestControllerImplTest {
     private static final String BRAND = "TESTBRAND";
     private static final String URL = "/api/brand";
     private static final String BRAND_JSON = "{\"name\":\"BrandName\"}";
     private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
     private static final String BRAND_JSON_WITH_ID = "{\"id\":1,\"name\":\"" + BRAND + "\"}";
+    private final BrandRepository repository;
+    private final ResourceLoader resourceLoader;
+    private final MockMvc mvc;
+
+
     @Autowired
-    BrandRepository repository;
-    @Autowired
-    private MockMvc mvc;
+    public BrandRestControllerImplTest(BrandRepository repository, ResourceLoader resourceLoader, MockMvc mvc) {
+        this.repository = repository;
+        this.resourceLoader = resourceLoader;
+        this.mvc = mvc;
+    }
 
     @Test
     public void whenPostBrand_thenReturn200() throws Exception {

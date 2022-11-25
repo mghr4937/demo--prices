@@ -22,8 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class BrandRepositoryTest {
 
+    private final BrandRepository repository;
+
     @Autowired
-    private BrandRepository repository;
+    public BrandRepositoryTest(BrandRepository repository) {
+        this.repository = repository;
+    }
 
     @Test
     public void testSave() throws Exception {

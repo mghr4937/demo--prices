@@ -31,8 +31,12 @@ public class SwaggerConfig {
     public static final String EMAIL = "mghr4937@gmail.com";
     public static final String LICENSE = "Apache 2.0";
     public static final String LICENSE_URL = "http://springdoc.org";
+    private final BuildProperties buildProperties;
+
     @Autowired
-    private BuildProperties buildProperties;
+    public SwaggerConfig(BuildProperties buildProperties) {
+        this.buildProperties = buildProperties;
+    }
 
     @Bean
     public Docket apiDocket() {

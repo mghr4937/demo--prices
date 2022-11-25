@@ -3,6 +3,7 @@ package com.mghr4937.demo.unit.repository;
 import com.mghr4937.demo.model.Price;
 import com.mghr4937.demo.repository.BrandRepository;
 import com.mghr4937.demo.repository.PriceRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -67,13 +69,23 @@ public class PriceRepositoryTest {
         assertEquals(4, result.size());
     }
 
+    @Test
+    public void testQueryPrice() throws Exception {
+        var date = LocalDateTime.of(2022, Month.MARCH, 15, 0, 0, 0);
+        var price = createPrice();
+
+        var result = priceRepository.queryPrice(date, 35999L, 1L);
+        assertTrue(result.isPresent());
+        assertEquals(price, result.get());
+    }
+
     private Price createPrice() {
         var brand = brandRepository.getReferenceById(1L);
         var price = Price.builder().brand(brand)
                 .startDate(LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0))
                 .endDate(LocalDateTime.of(2022, Month.MARCH, 31, 23, 59, 59))
                 .priceList(1)
-                .productId(35999)
+                .productId(35999L)
                 .priority(0)
                 .price(99.99)
                 .currency(Currency.getInstance(CURRENCY))

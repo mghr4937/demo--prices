@@ -5,6 +5,8 @@ import com.mghr4937.demo.repository.BrandRepository;
 import com.mghr4937.demo.repository.PriceRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -24,11 +26,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class PriceRestControllerImplTest {
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+public class PriceServiceImplTest {
     private static final String URL = "/api/price";
+    public static final String CURRENCY_CODE = "EUR";
     private static final String PRICE_JSON = "{\"brand\":{\"id\":1,\"name\":\"ZARA\"},\"currency\":\"EUR\",\"" +
             "endDate\":\"2022-11-25T00:12:32.966Z\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
             "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30.000Z\"}";
+
 
     @Autowired
     PriceRepository priceRepository;
@@ -78,10 +83,10 @@ public class PriceRestControllerImplTest {
                 .startDate(LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0))
                 .endDate(LocalDateTime.of(2022, Month.MARCH, 31, 23, 59, 59))
                 .priceList(1)
-                .productId(35455)
+                .productId(35455L)
                 .priority(0)
                 .price(85.50)
-                .currency(Currency.getInstance("EUR"))
+                .currency(Currency.getInstance(CURRENCY_CODE))
                 .build();
 
 

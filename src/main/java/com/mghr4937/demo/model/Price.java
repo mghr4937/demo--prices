@@ -25,7 +25,7 @@ public class Price {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
@@ -39,7 +39,7 @@ public class Price {
     private int priceList;
 
     @Column(name = "product_id", nullable = false)
-    private long productId;
+    private Long productId;
 
     @Column(name = "priority", nullable = false)
     private int priority;

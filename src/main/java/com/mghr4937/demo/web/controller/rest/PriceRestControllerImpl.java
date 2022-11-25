@@ -2,18 +2,23 @@ package com.mghr4937.demo.web.controller.rest;
 
 import com.mghr4937.demo.model.Price;
 import com.mghr4937.demo.repository.PriceRepository;
-import com.mghr4937.demo.web.controller.PriceRestController;
+import com.mghr4937.demo.web.controller.IPriceRestController;
 import com.mghr4937.demo.web.dto.PriceDto;
+import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.expression.ParseException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-public class PriceRestControllerImpl implements PriceRestController {
+public class PriceRestControllerImpl implements IPriceRestController {
 
     private final PriceRepository repository;
     private final ModelMapper modelMapper;
@@ -31,20 +36,27 @@ public class PriceRestControllerImpl implements PriceRestController {
     }
 
     @Override
-    public PriceDto save(PriceDto newPrice) {
+    public PriceDto save(@RequestBody PriceDto newPrice) {
         var price = repository.save(convertToEntity(newPrice));
         return convertToDto(price);
     }
 
     @Override
-    public PriceDto getPrice(Long id) {
+    public PriceDto getPrice(@PathVariable Long id) {
         var price = repository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         return convertToDto(price);
     }
 
     @Override
-    public void deleteBrand(Long id) {
+    public QueryPriceResponseDto getQueryPrice(@Param("date") LocalDateTime date, @Param("productId") Long productId, @Param("brandId") Long brandId) {
+        var price = repository.queryPrice(date, productId, brandId)
+                .orElseThrow(ResourceNotFoundException::new);
+        return convertToQueryPriceResponseDto(price);
+    }
+
+    @Override
+    public void deleteBrand(@PathVariable Long id) {
         repository.deleteById(id);
     }
 
@@ -55,4 +67,10 @@ public class PriceRestControllerImpl implements PriceRestController {
     private Price convertToEntity(PriceDto priceDto) throws ParseException {
         return modelMapper.map(priceDto, Price.class);
     }
+
+    private QueryPriceResponseDto convertToQueryPriceResponseDto(Price price) {
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        return modelMapper.map(price, QueryPriceResponseDto.class);
+    }
+
 }

@@ -1,14 +1,13 @@
 package com.mghr4937.demo.web.controller.rest;
 
-import com.mghr4937.demo.model.Price;
 import com.mghr4937.demo.repository.PriceRepository;
 import com.mghr4937.demo.web.controller.PriceOperations;
+import com.mghr4937.demo.web.controller.util.PriceConverter;
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.expression.ParseException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,32 +20,37 @@ import java.util.stream.Collectors;
 public class PriceController implements PriceOperations {
 
     private final PriceRepository repository;
-    private final ModelMapper modelMapper;
+    private final PriceConverter priceConverter;
 
     @Autowired
-    public PriceController(PriceRepository repository, ModelMapper modelMapper) {
+    public PriceController(PriceRepository repository, PriceConverter priceConverter) {
         this.repository = repository;
-        this.modelMapper = modelMapper;
+        this.priceConverter = priceConverter;
     }
 
     @Override
     public List<PriceDto> getAll() {
         var prices = repository.findAll();
-        return prices.stream().map(this::convertToDto)
+        return prices.stream().map(priceConverter::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public PriceDto save(@RequestBody PriceDto newPrice) {
-        var price = repository.save(convertToEntity(newPrice));
-        return convertToDto(price);
+        var price = repository.save(priceConverter.convertToEntity(newPrice));
+        return priceConverter.toResponse(price);
     }
 
     @Override
     public PriceDto getPrice(@PathVariable Long id) {
         var price = repository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        return convertToDto(price);
+        return priceConverter.toResponse(price);
+    }
+
+    @Override
+    public void deleteBrand(@PathVariable Long id) {
+        repository.deleteById(id);
     }
 
     @Override
@@ -55,26 +59,10 @@ public class PriceController implements PriceOperations {
                                                @RequestParam("brandId") Long brandId) {
         var price = repository.queryPrice(date, productId, brandId)
                 .orElseThrow(ResourceNotFoundException::new);
-        return convertToQueryPriceResponseDto(price);
+        return priceConverter.convertToQueryPriceResponse(price);
 
     }
 
-    @Override
-    public void deleteBrand(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
 
-    private PriceDto convertToDto(Price price) {
-        return modelMapper.map(price, PriceDto.class);
-    }
-
-    private Price convertToEntity(PriceDto priceDto) throws ParseException {
-        return modelMapper.map(priceDto, Price.class);
-    }
-
-    private QueryPriceResponseDto convertToQueryPriceResponseDto(Price price) {
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-        return modelMapper.map(price, QueryPriceResponseDto.class);
-    }
 
 }

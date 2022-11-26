@@ -23,19 +23,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class BrandRestControllerImplTest {
-    private static final String BRAND = "TESTBRAND";
+public class BrandControllerTest {
+    private static final String BRAND_NAME = "TESTBRAND";
+    private static final String ZARA = "ZARA";
+    private static final String NOT_FOUND_NAME = "NONE";
+    private static final String NOT_FOUND_ID = "/99";
+    private static final String EXISTING_BRAND_ID = "/1";
     private static final String URL = "/api/brand";
-    private static final String BRAND_JSON = "{\"name\":\"BrandName\"}";
+    private static final String SEARCH_FIND_BY_NAME = "/search/findByName?name=";
+    private static final String BRAND_JSON = "{\"name\":\"".concat(BRAND_NAME).concat("\"}");
     private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
-    private static final String BRAND_JSON_WITH_ID = "{\"id\":1,\"name\":\"" + BRAND + "\"}";
+    private static final String BRAND_JSON_WITH_ID = "{\"id\":1,\"name\":\"".concat(BRAND_NAME).concat("\"}");
+
+
     private final BrandRepository repository;
     private final ResourceLoader resourceLoader;
     private final MockMvc mvc;
 
 
     @Autowired
-    public BrandRestControllerImplTest(BrandRepository repository, ResourceLoader resourceLoader, MockMvc mvc) {
+    public BrandControllerTest(BrandRepository repository, ResourceLoader resourceLoader, MockMvc mvc) {
         this.repository = repository;
         this.resourceLoader = resourceLoader;
         this.mvc = mvc;
@@ -48,17 +55,17 @@ public class BrandRestControllerImplTest {
                         .content(BRAND_JSON))
                 .andExpect(status().isOk());
 
-        mvc.perform(get(URL.concat("/search/findByName?name=BrandName"))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(BRAND_NAME)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value("BrandName"));
+                .andExpect(jsonPath("$.name").value(BRAND_NAME));
     }
 
     @Test
     public void whenPostExistingBrand_thenReturn200() throws Exception {
-        mvc.perform(get(URL.concat("/1"))
+        mvc.perform(get(URL.concat(EXISTING_BRAND_ID))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -67,14 +74,14 @@ public class BrandRestControllerImplTest {
                         .content(BRAND_JSON_WITH_ID))
                 .andExpect(status().isOk());
 
-        mvc.perform(get(URL.concat("/search/findByName?name=" + BRAND))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME + BRAND_NAME))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value(BRAND));
+                .andExpect(jsonPath("$.name").value(BRAND_NAME));
 
-        mvc.perform(get(URL.concat("/search/findByName?name=ZARA"))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(ZARA)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -97,7 +104,7 @@ public class BrandRestControllerImplTest {
 
     @Test
     public void whenGetWithId_thenReturnBrand() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand(BRAND_NAME);
 
         mvc.perform(get(URL.concat("/" + brand.getId()))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -109,16 +116,16 @@ public class BrandRestControllerImplTest {
 
     @Test
     public void whenGetWithId_thenReturn404() throws Exception {
-        mvc.perform(get(URL.concat("/99"))
+        mvc.perform(get(URL.concat(NOT_FOUND_ID))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void whenFindByName_thenReturnBrand() throws Exception {
-        var brand = createBrand(BRAND);
+        var brand = createBrand(BRAND_NAME);
 
-        mvc.perform(get(URL.concat("/search/findByName?name=" + brand.getName()))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME + brand.getName()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
@@ -128,14 +135,14 @@ public class BrandRestControllerImplTest {
 
     @Test
     public void whenFindByName_thenReturn404() throws Exception {
-        mvc.perform(get(URL.concat("/search/findByName?name=NONE"))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(NOT_FOUND_NAME)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     private Brand createBrand(String name) {
         return repository.save(Brand.builder()
-                .name(BRAND)
+                .name(BRAND_NAME)
                 .build());
     }
 }

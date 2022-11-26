@@ -2,6 +2,7 @@ package com.mghr4937.demo.web.controller;
 
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Api(tags = "Price API")
 @RequestMapping("/api/price")
-public interface IPriceRestController {
+public interface PriceOperations {
 
     @GetMapping("")
     List<PriceDto> getAll();

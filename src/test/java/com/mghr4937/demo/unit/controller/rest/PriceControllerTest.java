@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class PriceRestControllerImplTest {
+public class PriceControllerTest {
     private static final String URL = "/api/price";
     public static final String CURRENCY_CODE = "EUR";
     private static final String PRICE_JSON = "{\"brand\":{\"id\":1,\"name\":\"ZARA\"},\"currency\":\"EUR\",\"" +
@@ -36,11 +36,10 @@ public class PriceRestControllerImplTest {
 
     private final PriceRepository priceRepository;
     private final BrandRepository brandRepository;
-
     private final MockMvc mvc;
 
     @Autowired
-    public PriceRestControllerImplTest(PriceRepository priceRepository, BrandRepository brandRepository, MockMvc mvc) {
+    public PriceControllerTest(PriceRepository priceRepository, BrandRepository brandRepository, MockMvc mvc) {
         this.priceRepository = priceRepository;
         this.brandRepository = brandRepository;
         this.mvc = mvc;

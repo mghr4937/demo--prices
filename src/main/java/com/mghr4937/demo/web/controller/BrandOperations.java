@@ -1,13 +1,14 @@
 package com.mghr4937.demo.web.controller;
 
 import com.mghr4937.demo.web.dto.BrandDto;
-import org.springframework.data.repository.query.Param;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(tags = "Brand API")
 @RequestMapping("/api/brand")
-public interface IBrandRestController {
+public interface BrandOperations {
     @GetMapping("")
     List<BrandDto> getAll();
 

@@ -8,15 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Currency;
 
-@Configuration
+@Component
 @Slf4j
-public class LoadDatabaseConfiguration {
+public class LoadDatabaseBean {
     @Bean
     public CommandLineRunner initDatabase(BrandRepository brandRepository, PriceRepository priceRepository) {
         return args -> {

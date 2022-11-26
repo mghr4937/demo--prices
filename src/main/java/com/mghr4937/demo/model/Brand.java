@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Getter
@@ -25,6 +26,7 @@ public class Brand {
     @Column(name = "name", nullable = false)
     @Length(min = 3, max = 255)
     @Type(type = "org.hibernate.type.TextType")
+    @NotBlank
     private String name;
 
     @Override

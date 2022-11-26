@@ -7,17 +7,18 @@ import com.mghr4937.demo.repository.PriceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Currency;
 
 @Component
 @Slf4j
 public class LoadDatabaseBean {
+
+    private static final String CURRENCY_CODE = "EUR";
+
     @Bean
     public CommandLineRunner initDatabase(BrandRepository brandRepository, PriceRepository priceRepository) {
         return args -> {
@@ -40,7 +41,7 @@ public class LoadDatabaseBean {
                     .productId(35455L)
                     .priority(0)
                     .price(35.50F)
-                    .currency(Currency.getInstance("EUR"))
+                    .currency(CURRENCY_CODE)
                     .build());
 
             prices.add(Price.builder().brand(brands.get(0))
@@ -50,7 +51,7 @@ public class LoadDatabaseBean {
                     .productId(35455L)
                     .priority(1)
                     .price(25.45F)
-                    .currency(Currency.getInstance("EUR"))
+                    .currency(CURRENCY_CODE)
                     .build());
 
             prices.add(Price.builder().brand(brands.get(0))
@@ -60,7 +61,7 @@ public class LoadDatabaseBean {
                     .productId(35455L)
                     .priority(1)
                     .price(30.50F)
-                    .currency(Currency.getInstance("EUR"))
+                    .currency(CURRENCY_CODE)
                     .build());
 
             prices.add(Price.builder().brand(brands.get(0))
@@ -70,7 +71,7 @@ public class LoadDatabaseBean {
                     .productId(35455L)
                     .priority(1)
                     .price(38.95F)
-                    .currency(Currency.getInstance("EUR"))
+                    .currency(CURRENCY_CODE)
                     .build());
 
             priceRepository.saveAll(prices);

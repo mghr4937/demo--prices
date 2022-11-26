@@ -3,17 +3,25 @@ package com.mghr4937.demo.web.dto;
 import com.mghr4937.demo.model.Brand;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
+
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 
 /**
  * A DTO for the {@link Brand} entity
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class BrandDto {
     @ApiModelProperty(example = "1")
     private Long id;
 
-    @Length(min = 3, max = 255)
     @ApiModelProperty(example = "ZARA")
+    @Size(min = 3, message = "Name must have more than 3 characters")
+    @NotBlank(message = "Name is mandatory")
+    @NotNull
+    @Valid
     private String name;
 }

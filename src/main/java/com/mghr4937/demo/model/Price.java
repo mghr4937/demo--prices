@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Currency;
 import java.util.Objects;
 
 @Getter
@@ -49,7 +48,7 @@ public class Price {
 
     @Column(name = "currency", nullable = false)
     @Length(max = 3)
-    private Currency currency;
+    private String currency;
 
     @Override
     public boolean equals(Object o) {

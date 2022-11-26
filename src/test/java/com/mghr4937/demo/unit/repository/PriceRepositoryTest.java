@@ -112,7 +112,7 @@ public class PriceRepositoryTest {
                 .productId(35999L)
                 .priority(priority)
                 .price(priceValue)
-                .currency(Currency.getInstance(CURRENCY))
+                .currency(CURRENCY)
                 .build();
 
 

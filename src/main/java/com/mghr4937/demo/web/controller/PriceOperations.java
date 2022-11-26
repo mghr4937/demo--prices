@@ -1,24 +1,30 @@
 package com.mghr4937.demo.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Api(tags = "Price API")
 @RequestMapping("/api/price")
+@Validated
 public interface PriceOperations {
 
     @GetMapping("")
     List<PriceDto> getAll();
 
     @PostMapping("")
-    public PriceDto save(@RequestBody PriceDto newPrice);
+    public PriceDto save(@Valid @RequestBody PriceDto newPrice);
 
     @GetMapping("/{id}")
     public PriceDto getPrice(@PathVariable Long id);
@@ -27,9 +33,9 @@ public interface PriceOperations {
     public void deleteBrand(@PathVariable Long id);
 
     @GetMapping("/queryPrice")
-    public QueryPriceResponseDto getQueryPrice(@ApiParam(value = "yyyy-MM-dd HH:mm:ss", example = "2022-06-01 00:00:00")
-                                               @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss") @RequestParam("date") LocalDateTime date,
-                                               @RequestParam("productId") Long productId,
-                                               @RequestParam("brandId") Long brandId);
+    public QueryPriceResponseDto getQueryPrice(@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @Valid @RequestParam("date")
+                                               LocalDateTime date,
+                                               @NotNull @Valid @RequestParam("productId") Long productId,
+                                               @NotNull @Valid @RequestParam("brandId") Long brandId);
 
 }

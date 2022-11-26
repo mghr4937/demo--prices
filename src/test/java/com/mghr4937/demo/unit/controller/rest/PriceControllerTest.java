@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Currency;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,8 +30,11 @@ public class PriceControllerTest {
     private static final String URL = "/api/price";
     public static final String CURRENCY_CODE = "EUR";
     private static final String PRICE_JSON = "{\"brand\":{\"id\":1,\"name\":\"ZARA\"},\"currency\":\"EUR\",\"" +
-            "endDate\":\"2022-11-25-00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25-00:15:30\"}";
+            "endDate\":\"2022-11-25T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
+            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30\"}";
+    private static final String PRICE_EMPTY_CURR_JSON = "{\"brand\":{\"id\":1,\"\":\"ZARA\"},\"currency\":\"\",\"" +
+            "endDate\":\"2022-11-25T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
+            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30\"}";
 
     private final PriceRepository priceRepository;
     private final BrandRepository brandRepository;
@@ -51,6 +53,14 @@ public class PriceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(PRICE_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenPostPriceWithEmptyName_thenReturn400() throws Exception {
+        mvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(PRICE_EMPTY_CURR_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -88,7 +98,7 @@ public class PriceControllerTest {
                 .productId(35455L)
                 .priority(0)
                 .price(85.50F)
-                .currency(Currency.getInstance(CURRENCY_CODE))
+                .currency(CURRENCY_CODE)
                 .build();
 
 

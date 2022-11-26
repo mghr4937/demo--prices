@@ -25,26 +25,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class BrandControllerTest {
     private static final String BRAND_NAME = "TESTBRAND";
-    private static final String ZARA = "ZARA";
     private static final String NOT_FOUND_NAME = "NONE";
     private static final String NOT_FOUND_ID = "/99";
     private static final String EXISTING_BRAND_ID = "/1";
     private static final String URL = "/api/brand";
     private static final String SEARCH_FIND_BY_NAME = "/search/findByName?name=";
     private static final String BRAND_JSON = "{\"name\":\"".concat(BRAND_NAME).concat("\"}");
-    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
+    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"a\"}";
     private static final String BRAND_JSON_WITH_ID = "{\"id\":1,\"name\":\"".concat(BRAND_NAME).concat("\"}");
 
 
     private final BrandRepository repository;
-    private final ResourceLoader resourceLoader;
+
     private final MockMvc mvc;
 
 
     @Autowired
-    public BrandControllerTest(BrandRepository repository, ResourceLoader resourceLoader, MockMvc mvc) {
+    public BrandControllerTest(BrandRepository repository, MockMvc mvc) {
         this.repository = repository;
-        this.resourceLoader = resourceLoader;
+//        this.resourceLoader = resourceLoader;
         this.mvc = mvc;
     }
 
@@ -64,34 +63,11 @@ public class BrandControllerTest {
     }
 
     @Test
-    public void whenPostExistingBrand_thenReturn200() throws Exception {
-        mvc.perform(get(URL.concat(EXISTING_BRAND_ID))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        mvc.perform(post(URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(BRAND_JSON_WITH_ID))
-                .andExpect(status().isOk());
-
-        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME + BRAND_NAME))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value(BRAND_NAME));
-
-        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(ZARA)))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void whenPostBrandWithEmptyName_thenReturn422() throws Exception {
+    public void whenPostBrandWithEmptyName_thenReturn400() throws Exception {
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BRAND_EMPTY_NAME_JSON))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isBadRequest());
     }
 
     @Test

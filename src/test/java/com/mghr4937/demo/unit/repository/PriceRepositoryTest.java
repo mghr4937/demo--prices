@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +48,7 @@ public class PriceRepositoryTest {
     public void testFindById() throws Exception {
         var price = createPrice(0, 45.50F);
 
-        Price result = priceRepository.findById(price.getId()).orElseThrow();
+        var result = priceRepository.findById(price.getId()).orElseThrow();
         assertNotNull(price);
         assertEquals(price.getId(), result.getId());
     }
@@ -58,8 +57,7 @@ public class PriceRepositoryTest {
     public void testFindAll() throws Exception {
         var price = createPrice(0, 45.50F);
 
-        List<Price> result = new ArrayList<>();
-        result.addAll(priceRepository.findAll());
+        List<Price> result = new ArrayList<>(priceRepository.findAll());
         assertEquals(5, result.size());
     }
 
@@ -68,8 +66,7 @@ public class PriceRepositoryTest {
         var price = createPrice(0, 45.50F);
 
         priceRepository.deleteById(price.getId());
-        List<Price> result = new ArrayList<>();
-        result.addAll(priceRepository.findAll());
+        List<Price> result = new ArrayList<>(priceRepository.findAll());
         assertEquals(4, result.size());
     }
 

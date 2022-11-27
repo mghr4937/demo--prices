@@ -36,78 +36,65 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
-        ErrorResponse apiError = ErrorResponse.builder()
+        var apiError = ErrorResponse.builder()
                 .message(errors)
                 .timeStamp(LocalDateTime.now())
                 .status(status).build();
 
         return new ResponseEntity<>(apiError, headers, status);
     }
-
-
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        ErrorResponse apiError = ErrorResponse.builder()
-                .message(errors)
-                .timeStamp(LocalDateTime.now())
-                .status(status).build();
-
-        return new ResponseEntity<>(apiError, headers, status);
-    }
-
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
-    protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        ErrorResponse apiError = ErrorResponse.builder()
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+        var errors = Collections.singletonList(ex.getMessage());
+        return ErrorResponse.builder()
                 .message(errors)
                 .timeStamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST).build();
+                .status(HttpStatus.NOT_FOUND).build();
 
-        return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
-    protected ResponseEntity<Object> handleInvalidArgument(RuntimeException ex, WebRequest request) {
-        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        ErrorResponse apiError = ErrorResponse.builder()
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidArgument(RuntimeException ex, WebRequest request) {
+        var errors = Collections.singletonList(ex.getMessage());
+        return ErrorResponse.builder()
                 .message(errors)
                 .timeStamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST).build();
 
-        return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler({DateTimeParseException.class})
-    public ResponseEntity<Object> handleDateTimeParseException(
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleDateTimeParseException(
             DateTimeParseException ex, WebRequest request) {
-        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        ErrorResponse apiError = ErrorResponse.builder()
+        var errors = Collections.singletonList(ex.getLocalizedMessage());
+        return ErrorResponse.builder()
                 .message(errors)
                 .timeStamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST).build();
 
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
+        var errors = new ArrayList<String>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " " +
                     violation.getPropertyPath() + ": " + violation.getMessage());
         }
 
-        ErrorResponse apiError = ErrorResponse.builder()
+        return ErrorResponse.builder()
                 .message(errors)
                 .timeStamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST).build();
 
-        return new ResponseEntity<Object>(
-                apiError, new HttpHeaders(), apiError.getStatus());
+
     }
 
 

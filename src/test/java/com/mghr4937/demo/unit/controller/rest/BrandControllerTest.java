@@ -27,13 +27,10 @@ public class BrandControllerTest {
     private static final String BRAND_NAME = "TESTBRAND";
     private static final String NOT_FOUND_NAME = "NONE";
     private static final String NOT_FOUND_ID = "/99";
-    private static final String EXISTING_BRAND_ID = "/1";
     private static final String URL = "/api/brand";
     private static final String SEARCH_FIND_BY_NAME = "/search/findByName?name=";
     private static final String BRAND_JSON = "{\"name\":\"".concat(BRAND_NAME).concat("\"}");
-    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"a\"}";
-    private static final String BRAND_JSON_WITH_ID = "{\"id\":1,\"name\":\"".concat(BRAND_NAME).concat("\"}");
-
+    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
 
     private final BrandRepository repository;
 
@@ -43,7 +40,6 @@ public class BrandControllerTest {
     @Autowired
     public BrandControllerTest(BrandRepository repository, MockMvc mvc) {
         this.repository = repository;
-//        this.resourceLoader = resourceLoader;
         this.mvc = mvc;
     }
 

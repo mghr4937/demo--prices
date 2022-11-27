@@ -34,7 +34,7 @@ public class BrandRepositoryTest {
         var brand = createBrand();
 
         var brandsIterable = repository.findAll();
-        List<Brand> brandsList = new ArrayList<>(brandsIterable);
+        var brandsList = new ArrayList<>(brandsIterable);
 
         assertTrue(brandsList.contains(brand));
     }
@@ -43,7 +43,7 @@ public class BrandRepositoryTest {
     public void testFindById() throws Exception {
         var brand = createBrand();
 
-        Brand result = repository.findById(brand.getId()).orElseThrow();
+        var result = repository.findById(brand.getId()).orElseThrow();
         assertNotNull(brand);
         assertEquals(brand.getId(), result.getId());
     }
@@ -52,7 +52,7 @@ public class BrandRepositoryTest {
     public void testFindByName() throws Exception {
         var brand = createBrand();
 
-        Optional<Brand> result = repository.findByName(brand.getName());
+        var result = repository.findByName(brand.getName());
         assertNotNull(brand);
         assertEquals(brand.getName(), result.get().getName());
     }
@@ -61,8 +61,7 @@ public class BrandRepositoryTest {
     public void testFindAll() throws Exception {
         var brand = createBrand();
 
-        List<Brand> result = new ArrayList<>();
-        result.addAll(repository.findAll());
+        var result = new ArrayList<>(repository.findAll());
         assertEquals(4, result.size());
     }
 
@@ -71,8 +70,7 @@ public class BrandRepositoryTest {
         var brand = createBrand();
 
         repository.deleteById(brand.getId());
-        List<Brand> result = new ArrayList<>();
-        result.addAll(repository.findAll());
+        var result = new ArrayList<>(repository.findAll());
         assertEquals(3, result.size());
     }
 

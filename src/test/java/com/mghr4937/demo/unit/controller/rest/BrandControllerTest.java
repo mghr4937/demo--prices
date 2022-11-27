@@ -91,7 +91,7 @@ public class BrandControllerTest {
     }
 
     @Test
-    public void whenGetWithId_thenReturn404() throws Exception {
+    public void whenGetWithBadId_thenReturn404() throws Exception {
         mvc.perform(get(URL.concat(NOT_FOUND_ID))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -110,7 +110,7 @@ public class BrandControllerTest {
     }
 
     @Test
-    public void whenFindByName_thenReturn404() throws Exception {
+    public void whenFindByNotFoundName_thenReturn404() throws Exception {
         mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(NOT_FOUND_NAME)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());

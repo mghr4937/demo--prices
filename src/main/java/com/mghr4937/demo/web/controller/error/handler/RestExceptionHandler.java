@@ -16,11 +16,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -30,56 +31,65 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                  HttpHeaders headers,
                                  HttpStatus status, WebRequest request) {
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
-
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(status).build();
 
-        body.put("errors", errors);
-
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(apiError, headers, status);
     }
 
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
-
         List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        body.put("errors", errors);
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(status).build();
 
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(apiError, headers, status);
     }
 
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.NOT_FOUND);
-        body.put("errors", "Price not found");
-        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.NOT_FOUND);
+        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST).build();
+
+        return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value
-            = {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
     protected ResponseEntity<Object> handleInvalidArgument(RuntimeException ex, WebRequest request) {
+        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST).build();
 
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("errors", ex.getMessage());
+        return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
 
-        return handleExceptionInternal(ex, body,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+
+    @ExceptionHandler({DateTimeParseException.class})
+    public ResponseEntity<Object> handleDateTimeParseException(
+            DateTimeParseException ex, WebRequest request) {
+        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST).build();
+
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
@@ -91,8 +101,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                     violation.getPropertyPath() + ": " + violation.getMessage());
         }
 
-        ErrorResponse apiError =
-                new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors, LocalDateTime.now());
+        ErrorResponse apiError = ErrorResponse.builder()
+                .message(errors)
+                .timeStamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST).build();
+
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }

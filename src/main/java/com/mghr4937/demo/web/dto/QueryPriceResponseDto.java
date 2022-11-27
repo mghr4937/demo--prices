@@ -18,12 +18,17 @@ public class QueryPriceResponseDto {
     private Long brandId;
 
     @ApiModelProperty(example = "1")
+    private int priority;
+
+    @ApiModelProperty(example = "1")
     private int priceList;
 
+    @ApiModelProperty(required = true, value = "yyyy-MM-ddTHH:mm:ss", example = "2020-01-01T16:01:33")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Valid
     private LocalDateTime startDate;
 
+    @ApiModelProperty(required = true, value = "yyyy-MM-ddTHH:mm:ss", example = "2020-02-01T10:00:33")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Valid
     private LocalDateTime endDate;

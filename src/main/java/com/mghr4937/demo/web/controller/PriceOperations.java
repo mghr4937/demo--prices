@@ -32,9 +32,10 @@ public interface PriceOperations {
     @DeleteMapping("/{id}")
     public void deleteBrand(@PathVariable Long id);
 
-    @GetMapping("/queryPrice")
-    public QueryPriceResponseDto getQueryPrice(@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @Valid @RequestParam("date")
-                                               LocalDateTime date,
+    @GetMapping("/query")
+    public QueryPriceResponseDto getQueryPrice(@RequestParam("date")
+                                               @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @Valid
+                                               String date,
                                                @NotNull @Valid @RequestParam("productId") Long productId,
                                                @NotNull @Valid @RequestParam("brandId") Long brandId);
 

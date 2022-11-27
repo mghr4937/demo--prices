@@ -12,8 +12,7 @@ import java.util.List;
 @Builder
 public class ErrorResponse {
     private HttpStatus status;
-    private String message;
-    private List<String> errors;
+    private List<String> message;
     @JsonFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private LocalDateTime timeStamp;
 

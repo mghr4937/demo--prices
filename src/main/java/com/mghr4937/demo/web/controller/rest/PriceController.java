@@ -51,8 +51,8 @@ public class PriceController implements PriceOperations {
     }
 
     @Override
-    public QueryPriceResponseDto getQueryPrice(LocalDateTime date, Long productId, Long brandId) {
-        var price = repository.queryPrice(date, productId, brandId)
+    public QueryPriceResponseDto getQueryPrice(String date, Long productId, Long brandId) {
+        var price = repository.queryPrice(LocalDateTime.parse(date), productId, brandId)
                 .orElseThrow(ResourceNotFoundException::new);
 
         return priceConverter.convertToQueryPriceResponse(price);

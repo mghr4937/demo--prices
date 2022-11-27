@@ -29,10 +29,12 @@ public class PriceDto implements Serializable {
     @Valid
     private BrandDto brand;
 
+    @ApiModelProperty(required = true, value = "yyyy-MM-ddTHH:mm:ss", example = "2020-01-01T16:01:33")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Valid
     private LocalDateTime startDate;
 
+    @ApiModelProperty(required = true, value = "yyyy-MM-dd-HH:mm:ss", example = "2022-02-25T00:00:00")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Valid
     private LocalDateTime endDate;
@@ -40,7 +42,7 @@ public class PriceDto implements Serializable {
     @ApiModelProperty(example = "1")
     private int priceList;
 
-    @ApiModelProperty(example = "ZARA")
+    @ApiModelProperty(example = "35455")
     private long productId;
 
     @ApiModelProperty(example = "1")

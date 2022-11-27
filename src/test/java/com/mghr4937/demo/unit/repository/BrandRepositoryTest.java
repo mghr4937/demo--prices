@@ -1,7 +1,7 @@
 package com.mghr4937.demo.unit.repository;
 
-import com.mghr4937.demo.model.Brand;
 import com.mghr4937.demo.repository.BrandRepository;
+import com.mghr4937.demo.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,16 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class BrandRepositoryTest {
 
+    private final EntityTestUtil entityTestUtil;
     private final BrandRepository repository;
 
     @Autowired
-    public BrandRepositoryTest(BrandRepository repository) {
+    public BrandRepositoryTest(EntityTestUtil entityTestUtil, BrandRepository repository) {
+        this.entityTestUtil = entityTestUtil;
         this.repository = repository;
     }
 
     @Test
     public void testSave() throws Exception {
-        var brand = createBrand();
+        var brand = entityTestUtil.createBrand();
 
         var brandsIterable = repository.findAll();
         var brandsList = new ArrayList<>(brandsIterable);
@@ -41,7 +39,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindById() throws Exception {
-        var brand = createBrand();
+        var brand = entityTestUtil.createBrand();
 
         var result = repository.findById(brand.getId()).orElseThrow();
         assertNotNull(brand);
@@ -50,7 +48,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindByName() throws Exception {
-        var brand = createBrand();
+        var brand = entityTestUtil.createBrand();
 
         var result = repository.findByName(brand.getName());
         assertNotNull(brand);
@@ -59,7 +57,7 @@ public class BrandRepositoryTest {
 
     @Test
     public void testFindAll() throws Exception {
-        var brand = createBrand();
+        var brand = entityTestUtil.createBrand();
 
         var result = new ArrayList<>(repository.findAll());
         assertEquals(4, result.size());
@@ -67,17 +65,11 @@ public class BrandRepositoryTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        var brand = createBrand();
+        var brand = entityTestUtil.createBrand();
 
         repository.deleteById(brand.getId());
         var result = new ArrayList<>(repository.findAll());
         assertEquals(3, result.size());
-    }
-
-    private Brand createBrand() {
-        return repository.save(Brand.builder()
-                .name(randomAlphabetic(6))
-                .build());
     }
 
 

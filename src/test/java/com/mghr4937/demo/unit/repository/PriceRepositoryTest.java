@@ -1,8 +1,8 @@
 package com.mghr4937.demo.unit.repository;
 
 import com.mghr4937.demo.model.Price;
-import com.mghr4937.demo.repository.BrandRepository;
 import com.mghr4937.demo.repository.PriceRepository;
+import com.mghr4937.demo.util.EntityTestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +23,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class PriceRepositoryTest {
-    private static final String CURRENCY = "EUR";
-
     private final PriceRepository priceRepository;
-    private final BrandRepository brandRepository;
+
+    private final EntityTestUtil entityTestUtil;
 
     @Autowired
-    public PriceRepositoryTest(PriceRepository priceRepository, BrandRepository brandRepository) {
+    public PriceRepositoryTest(PriceRepository priceRepository, EntityTestUtil entityTestUtil) {
         this.priceRepository = priceRepository;
-        this.brandRepository = brandRepository;
+        this.entityTestUtil = entityTestUtil;
     }
 
     @Test
     public void testSave() throws Exception {
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         var pricesIterable = priceRepository.findAll();
         List<Price> pricesList = new ArrayList<>(pricesIterable);
@@ -46,7 +45,7 @@ public class PriceRepositoryTest {
 
     @Test
     public void testFindById() throws Exception {
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         var result = priceRepository.findById(price.getId()).orElseThrow();
         assertNotNull(price);
@@ -55,7 +54,7 @@ public class PriceRepositoryTest {
 
     @Test
     public void testFindAll() throws Exception {
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         List<Price> result = new ArrayList<>(priceRepository.findAll());
         assertEquals(5, result.size());
@@ -63,7 +62,7 @@ public class PriceRepositoryTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         priceRepository.deleteById(price.getId());
         List<Price> result = new ArrayList<>(priceRepository.findAll());
@@ -73,7 +72,7 @@ public class PriceRepositoryTest {
     @Test
     public void testQueryPrice() throws Exception {
         var date = LocalDateTime.of(2022, Month.MARCH, 15, 0, 0, 0);
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         var result = priceRepository.queryPrice(date, 35999L, 1L);
         assertTrue(result.isPresent());
@@ -83,8 +82,8 @@ public class PriceRepositoryTest {
     @Test
     public void testQueryPriceWithSameDateAndHighPriority() throws Exception {
         var date = LocalDateTime.of(2022, Month.MARCH, 15, 0, 0, 0);
-        createPrice(0, 45.50F);
-        var priceHighPriority = createPrice(1, 99.99F);
+        entityTestUtil.createPrice(0, 45.50F);
+        var priceHighPriority = entityTestUtil.createPrice(1, 99.99F);
 
         var result = priceRepository.queryPrice(date, 35999L, 1L);
         assertTrue(result.isPresent());
@@ -94,25 +93,11 @@ public class PriceRepositoryTest {
     @Test
     public void testQueryPriceNotFound() throws Exception {
         var date = LocalDateTime.of(2022, Month.MARCH, 15, 0, 0, 0);
-        var price = createPrice(0, 45.50F);
+        var price = entityTestUtil.createPrice(0, 45.50F);
 
         var result = priceRepository.queryPrice(date, 35999L, 2L);
         assertFalse(result.isPresent());
     }
 
-    private Price createPrice(int priority, Float priceValue) {
-        var brand = brandRepository.getReferenceById(1L);
-        var price = Price.builder().brand(brand)
-                .startDate(LocalDateTime.of(2022, Month.MARCH, 1, 0, 0, 0))
-                .endDate(LocalDateTime.of(2022, Month.MARCH, 31, 23, 59, 59))
-                .priceList(1)
-                .productId(35999L)
-                .priority(priority)
-                .price(priceValue)
-                .currency(CURRENCY)
-                .build();
 
-
-        return priceRepository.save(price);
-    }
 }

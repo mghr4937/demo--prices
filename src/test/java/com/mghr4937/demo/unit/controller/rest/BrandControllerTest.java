@@ -1,14 +1,12 @@
 package com.mghr4937.demo.unit.controller.rest;
 
-import com.mghr4937.demo.model.Brand;
-import com.mghr4937.demo.repository.BrandRepository;
+import com.mghr4937.demo.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,14 +30,14 @@ public class BrandControllerTest {
     private static final String BRAND_JSON = "{\"name\":\"".concat(BRAND_NAME).concat("\"}");
     private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
 
-    private final BrandRepository repository;
+    private final EntityTestUtil entityTestUtil;
 
     private final MockMvc mvc;
 
 
     @Autowired
-    public BrandControllerTest(BrandRepository repository, MockMvc mvc) {
-        this.repository = repository;
+    public BrandControllerTest(EntityTestUtil entityTestUtil, MockMvc mvc) {
+        this.entityTestUtil = entityTestUtil;
         this.mvc = mvc;
     }
 
@@ -76,7 +74,7 @@ public class BrandControllerTest {
 
     @Test
     public void whenGetWithId_thenReturnBrand() throws Exception {
-        var brand = createBrand(BRAND_NAME);
+        var brand = entityTestUtil.createBrand(BRAND_NAME);
 
         mvc.perform(get(URL.concat("/" + brand.getId()))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -95,7 +93,7 @@ public class BrandControllerTest {
 
     @Test
     public void whenFindByName_thenReturnBrand() throws Exception {
-        var brand = createBrand(BRAND_NAME);
+        var brand = entityTestUtil.createBrand(BRAND_NAME);
 
         mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME + brand.getName()))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -112,9 +110,5 @@ public class BrandControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private Brand createBrand(String name) {
-        return repository.save(Brand.builder()
-                .name(BRAND_NAME)
-                .build());
-    }
+
 }

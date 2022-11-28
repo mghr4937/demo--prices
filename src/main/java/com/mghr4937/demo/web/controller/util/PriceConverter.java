@@ -3,10 +3,12 @@ package com.mghr4937.demo.web.controller.util;
 import com.mghr4937.demo.model.Price;
 import com.mghr4937.demo.web.dto.PriceDto;
 import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class PriceConverter {
 

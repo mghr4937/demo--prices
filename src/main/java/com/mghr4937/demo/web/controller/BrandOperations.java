@@ -13,10 +13,10 @@ import java.util.List;
 @RequestMapping("/api/brand")
 @Validated
 public interface BrandOperations {
-    @GetMapping("")
+    @GetMapping
     List<BrandDto> getAll();
 
-    @PostMapping("")
+    @PostMapping
     public BrandDto save(@RequestBody BrandDto newBrand);
 
     @GetMapping("/{id}")

@@ -16,10 +16,10 @@ import java.util.List;
 @Validated
 public interface PriceOperations {
 
-    @GetMapping("")
+    @GetMapping
     List<PriceDto> getAll();
 
-    @PostMapping("")
+    @PostMapping
     public PriceDto save(@Valid @RequestBody PriceDto newPrice);
 
     @GetMapping("/{id}")

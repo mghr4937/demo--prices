@@ -9,6 +9,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,16 @@ public class BrandController implements BrandOperations {
     }
 
     @Override
-    public BrandDto save(@RequestBody BrandDto newBrand) {
-        log.info("Saving Brand: {}", newBrand);
+    public BrandDto save(BrandDto newBrand) throws ConstraintViolationException {
+        BrandDto oldBrand;
+        var exists = repository.findByName(newBrand.getName());
+        if (exists.isPresent()) {
+            log.info("Brand already stored: {}", exists.get().getName());
+            return brandConverter.toResponse(exists.get());
+        }
+        log.info("Saving Brand in database: {}", newBrand.getName());
         var brand = repository.save(brandConverter.convertToEntity(newBrand));
+        log.info("Brand stored: {}", brand);
         return brandConverter.toResponse(brand);
     }
 

@@ -26,7 +26,7 @@ public class Brand {
     @Column(name = "name", nullable = false)
     @Length(min = 3, max = 255)
     @Type(type = "org.hibernate.type.TextType")
-    @NotBlank
+    @NotBlank(message = "Name must not be empty")
     private String name;
 
     @Override

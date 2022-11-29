@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class QueryPriceTest {
 
-    private static final String PATH = "/api/price/query";
+    private static final String PATH = "/price/query";
     private static final Long PRODUCT_ID = 35455L;
 
     private final MockMvc mvc;

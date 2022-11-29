@@ -1,13 +1,20 @@
 package com.mghr4937.demo.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mghr4937.demo.model.Brand;
 import com.mghr4937.demo.model.Price;
 import com.mghr4937.demo.repository.BrandRepository;
 import com.mghr4937.demo.repository.PriceRepository;
+import com.mghr4937.demo.web.dto.BrandDto;
+import com.mghr4937.demo.web.dto.PriceDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -18,15 +25,27 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 public class EntityTestUtil {
 
     private static final String CURRENCY = "EUR";
+    private static final String TEST_DATA_PATH = "src/test/resources/data";
 
     private final PriceRepository priceRepository;
     private final BrandRepository brandRepository;
+    private final ObjectMapper objectMapper;
 
 
     @Autowired
-    public EntityTestUtil(PriceRepository priceRepository, BrandRepository brandRepository) {
+    public EntityTestUtil(PriceRepository priceRepository, BrandRepository brandRepository, ObjectMapper objectMapper) {
         this.priceRepository = priceRepository;
         this.brandRepository = brandRepository;
+        this.objectMapper = objectMapper;
+    }
+
+    public BrandDto getBrandDtoFromFile(String path) throws IOException {
+        String content = Files.readString(Path.of(TEST_DATA_PATH.concat(path)), StandardCharsets.US_ASCII);
+        return objectMapper.readValue(content, BrandDto.class);
+    }
+
+    public String retrieveFileContent(String path) throws IOException {
+        return Files.readString(Path.of(TEST_DATA_PATH.concat(path)), StandardCharsets.US_ASCII);
     }
 
     public Price createPrice(int priority, Float priceValue) {
@@ -59,4 +78,6 @@ public class EntityTestUtil {
                 .name(name)
                 .build());
     }
+
+
 }

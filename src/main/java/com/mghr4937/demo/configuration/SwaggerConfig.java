@@ -33,7 +33,6 @@ public class SwaggerConfig {
     public static final String LICENSE_URL = "http://springdoc.org";
     private final BuildProperties buildProperties;
 
-    @Autowired
     public SwaggerConfig(BuildProperties buildProperties) {
         this.buildProperties = buildProperties;
     }

@@ -18,7 +18,7 @@ public class PriceConverter {
         this.modelMapper = modelMapper;
     }
 
-    public PriceDto toResponse(Price price) {
+    public PriceDto toResponse(Price price) throws ParseException {
         return modelMapper.map(price, PriceDto.class);
     }
 

@@ -34,7 +34,7 @@ mvn spring-boot:run
 
 ## Swagger
 
-[http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
+[http://localhost:8082/api/swagger-ui/index.html#/](http://localhost:8082/api/swagger-ui/index.html#/)
 
 ## Actuator
 

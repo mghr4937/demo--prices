@@ -1,6 +1,8 @@
 package com.mghr4937.demo.unit.controller.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mghr4937.demo.util.EntityTestUtil;
+import com.mghr4937.demo.web.dto.BrandDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -25,42 +27,44 @@ public class BrandControllerTest {
     private static final String BRAND_NAME = "TESTBRAND";
     private static final String NOT_FOUND_NAME = "NONE";
     private static final String NOT_FOUND_ID = "/99";
-    private static final String URL = "/api/brand";
+    private static final String URL = "/brand";
     private static final String SEARCH_FIND_BY_NAME = "/search/findByName?name=";
-    private static final String BRAND_JSON = "{\"name\":\"".concat(BRAND_NAME).concat("\"}");
-    private static final String BRAND_EMPTY_NAME_JSON = "{\"name\":\"\"}";
 
     private final EntityTestUtil entityTestUtil;
+    private final ObjectMapper objectMapper;
 
     private final MockMvc mvc;
 
-
     @Autowired
-    public BrandControllerTest(EntityTestUtil entityTestUtil, MockMvc mvc) {
+    public BrandControllerTest(EntityTestUtil entityTestUtil, ObjectMapper objectMapper, MockMvc mvc) {
         this.entityTestUtil = entityTestUtil;
+        this.objectMapper = objectMapper;
         this.mvc = mvc;
     }
 
     @Test
     public void whenPostBrand_thenReturn200() throws Exception {
+        var brand = entityTestUtil.getBrandDtoFromFile("/brand.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(BRAND_JSON))
+                        .content(objectMapper.writeValueAsString(brand)))
                 .andExpect(status().isOk());
 
-        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(BRAND_NAME)))
+        mvc.perform(get(URL.concat(SEARCH_FIND_BY_NAME.concat(brand.getName())))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value(BRAND_NAME));
+                .andExpect(jsonPath("$.name").value(brand.getName()));
     }
+
 
     @Test
     public void whenPostBrandWithEmptyName_thenReturn400() throws Exception {
+        String content = entityTestUtil.retrieveFileContent("/brand_empty_name.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(BRAND_EMPTY_NAME_JSON))
+                        .content(content))
                 .andExpect(status().isBadRequest());
     }
 

@@ -10,14 +10,14 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Api(tags = "Brand API")
-@RequestMapping("/api/brand")
+@RequestMapping("/brand")
 @Validated
 public interface BrandOperations {
     @GetMapping
     List<BrandDto> getAll();
 
     @PostMapping
-    public BrandDto save(@RequestBody BrandDto newBrand);
+    public BrandDto save(@Valid @RequestBody BrandDto newBrand);
 
     @GetMapping("/{id}")
     public BrandDto getBrand(@Valid @PathVariable Long id);

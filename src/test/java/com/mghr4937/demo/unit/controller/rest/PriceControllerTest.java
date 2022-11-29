@@ -1,5 +1,6 @@
 package com.mghr4937.demo.unit.controller.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mghr4937.demo.util.EntityTestUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +24,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class PriceControllerTest {
-    private static final String URL = "/api/price";
+    private static final String URL = "/price";
     private static final String QUERY_PRICE_PATH = URL.concat("/query");
     private static final Long BAD_PRODUCT_ID = 999L;
     private static final Long PRODUCT_ID = 35455L;
-    private static final String PRICE_JSON = "{\"brand\":{\"id\":1,\"name\":\"ZARA\"},\"currency\":\"EUR\",\"" +
-            "endDate\":\"2022-11-25T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30\"}";
-    private static final String PRICE_EMPTY_CURR_JSON = "{\"brand\":{\"id\":1,\"\":\"ZARA\"},\"currency\":\"\",\"" +
-            "endDate\":\"2022-11-25T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30\"}";
-
-    private static final String PRICE_EMPTY_BAD_CURR_JSON = "{\"brand\":{\"id\":1,\"\":\"ZARA\"},\"currency\":\"BADEUR\",\"" +
-            "endDate\":\"2022-11-25T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25T00:15:30\"}";
-
-    private static final String PRICE_EMPTY_BAD_DATE_JSON = "{\"brand\":{\"id\":1,\"\":\"ZARA\"},\"currency\":\"BADEUR\",\"" +
-            "endDate\":\"2022-11-T00:12:32\", \"id\":0, \"price\":0,\"priceList\": 0,\"priority\":0," +
-            "\"productId\":0,\"startDate\":\"2022-11-25T003:15:30\"}";
     private static final String BAD_ID = "/99";
 
     private final EntityTestUtil entityTestUtil;
     private final MockMvc mvc;
 
     @Autowired
-    public PriceControllerTest(EntityTestUtil entityTestUtil, MockMvc mvc) {
+    public PriceControllerTest(EntityTestUtil entityTestUtil, ObjectMapper objectMapper, MockMvc mvc) {
 
         this.entityTestUtil = entityTestUtil;
         this.mvc = mvc;
@@ -55,33 +42,46 @@ public class PriceControllerTest {
 
     @Test
     public void whenPostPrice_thenReturn200() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(PRICE_JSON))
+                        .content(rawJson))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void whenPostPriceWithEmptyCurrency_thenReturn400() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price_empty_currency.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(PRICE_EMPTY_CURR_JSON))
+                        .content(rawJson))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void whenPostPriceWithBadDate_thenReturn400() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price_bad_date.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(PRICE_EMPTY_BAD_DATE_JSON))
+                        .content(rawJson))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void whenPostPriceWithBadCurrency_thenReturn400() throws Exception {
+    public void whenPostPriceWithShortCurrency_thenReturn400() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price_short_currency.json");
         mvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(PRICE_EMPTY_BAD_CURR_JSON))
+                        .content(rawJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenPostPriceWithLongCurrency_thenReturn400() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price_long_currency.json");
+        mvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(rawJson))
                 .andExpect(status().isBadRequest());
     }
 
@@ -150,7 +150,7 @@ public class PriceControllerTest {
         var query = UriComponentsBuilder.fromUriString(QUERY_PRICE_PATH)
                 // Add query parameter
                 .queryParam("brandId", 1L)
-                .queryParam("date", "2020-06-14T120:00:00")
+                .queryParam("date", "2020-06-14T120:00:00Z")
                 .queryParam("productId", PRODUCT_ID)
                 .toUriString();
         mvc.perform((get(query))

@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                  HttpHeaders headers,
                                  HttpStatus status, WebRequest request) {
-        log.info("MethodArgumentNotValidException :: " + ex.getMessage());
+        log.info("MethodArgumentNotValidException :: {}", ex.getMessage());
 
 
         List<String> errors = ex.getBindingResult()
@@ -51,7 +51,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object>
     handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        log.info("HttpMessageNotReadableException :: " + ex.getMessage());
+        log.info("HttpMessageNotReadableException :: {}", ex.getMessage());
 
 
         var errors = Collections.singletonList(ex.getMostSpecificCause().getMessage());
@@ -66,7 +66,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object>
     handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        log.info("TypeMismatchException :: " + ex.getMessage());
+        log.info("TypeMismatchException :: {}", ex.getMessage());
 
         var errors = Collections.singletonList(ex.getMostSpecificCause().getMessage());
         var apiError = ErrorResponse.builder()
@@ -90,7 +90,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleInvalidArgument(RuntimeException ex, WebRequest request) {
-        log.info("IllegalArgumentException :: " + ex.getMessage());
+        log.info("IllegalArgumentException :: {}", ex.getMessage());
         var errors = Collections.singletonList(ex.getMessage());
         return ErrorResponse.builder()
                 .message(errors)
@@ -99,23 +99,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    @ExceptionHandler({JsonProcessingException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleJsonProcessingException(
-            JsonProcessingException ex, WebRequest request) {
-        log.error("JsonProcessingException :: " + ex.getMessage());
-        var errors = Collections.singletonList(ex.getLocalizedMessage());
-        return ErrorResponse.builder()
-                .message(errors)
-                .timeStamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST).build();
-    }
-
     @ExceptionHandler({ConstraintViolationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(
             ConstraintViolationException ex, WebRequest request) {
-        log.info("ConstraintViolationException:: " + ex.getMessage());
+        log.info("ConstraintViolationException:: {}", ex.getMessage());
         var errors = new ArrayList<String>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " " +
@@ -130,7 +118,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {ServerErrorException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handleServerErrorException(ServerErrorException ex, WebRequest request) {
-        log.info("Server Error :: ", ex.getMessage());
+        log.info("Server Error :: {}", ex.getMessage());
         var errors = Collections.singletonList("Oops, something really bad happened");
         return ErrorResponse
                 .builder()

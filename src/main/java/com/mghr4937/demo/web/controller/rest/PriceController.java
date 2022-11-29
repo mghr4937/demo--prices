@@ -8,14 +8,18 @@ import com.mghr4937.demo.web.dto.QueryPriceResponseDto;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@Validated
 public class PriceController implements PriceOperations {
 
     private final PriceRepository repository;
@@ -35,10 +39,15 @@ public class PriceController implements PriceOperations {
     }
 
     @Override
-    public PriceDto save(PriceDto newPrice) {
+    public PriceDto save(@Valid PriceDto newPrice) {
         log.info("Saving Price: {}", newPrice);
-        var price = repository.save(priceConverter.convertToEntity(newPrice));
-        return priceConverter.toResponse(price);
+        if (newPrice.getStartDate().isBefore(newPrice.getEndDate())) {
+            var price = repository.save(priceConverter.convertToEntity(newPrice));
+            log.info("Price stored: {}", newPrice);
+            return priceConverter.toResponse(price);
+        } else {
+            throw new IllegalArgumentException("Start date must be Before End date");
+        }
     }
 
     @Override
@@ -58,13 +67,21 @@ public class PriceController implements PriceOperations {
     @Override
     public QueryPriceResponseDto getQueryPrice(String date, Long productId, Long brandId) {
         log.info("Querying Price by brandId: {}, productId: {}, date: {}", brandId, productId, date);
-        var price = repository.queryPrice(LocalDateTime.parse(date), productId, brandId)
-                .orElseThrow(ResourceNotFoundException::new);
+        LocalDateTime datetime;
+        try {
+            log.info("Parsing date: {}", date);
+            datetime = LocalDateTime.parse(date);
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException(ex);
+        }
 
+        log.info("Searching in database");
+        var price = repository.queryPrice(datetime, productId, brandId)
+                .orElseThrow(ResourceNotFoundException::new);
+        log.info("Matched Price: {}", price);
         return priceConverter.convertToQueryPriceResponse(price);
 
     }
-
 
 
 }

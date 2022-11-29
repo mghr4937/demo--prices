@@ -3,9 +3,10 @@ package com.mghr4937.demo.model;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Builder
 @AllArgsConstructor
+@Validated
 public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,27 +29,26 @@ public class Price {
     private Brand brand;
 
     @Column(name = "start_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private LocalDateTime endDate;
 
     @Column(name = "price_list", nullable = false)
-    private int priceList;
+    private Integer priceList;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
     @Column(name = "priority", nullable = false)
-    private int priority;
+    private Integer priority;
 
     @Column(name = "price", nullable = false)
+    @Min(0)
     private Float price;
 
     @Column(name = "currency", nullable = false)
-    @Length(max = 3)
+    @Length(min = 3, max = 3)
     private String currency;
 
     @Override

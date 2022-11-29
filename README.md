@@ -28,13 +28,10 @@ the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/r
 mvn spring-boot:run
 ```
 
-## Test Data
-
-### Brands
-
 ## Swagger
 
 [http://localhost:8082/api/swagger-ui/index.html#/](http://localhost:8082/api/swagger-ui/index.html#/)
+[http://localhost:8082/api/v2/api-docs](http://localhost:8082/api/v2/api-docs)
 
 ## Actuator
 

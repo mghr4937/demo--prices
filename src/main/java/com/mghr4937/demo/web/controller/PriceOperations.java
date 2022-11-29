@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Api(tags = "Price API")
-@RequestMapping("/api/price")
+@RequestMapping("/price")
 @Validated
 public interface PriceOperations {
 
@@ -30,9 +30,9 @@ public interface PriceOperations {
 
     @GetMapping("/query")
     public QueryPriceResponseDto getQueryPrice(@RequestParam("date")
-                                               @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @Valid
+                                               @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'") @Valid
                                                String date,
                                                @NotNull @Valid @RequestParam("productId") Long productId,
-                                               @NotNull @Valid @RequestParam("brandId") Long brandId);
+                                               @NotNull @Valid @RequestParam("brandId") Long brandId) throws Exception;
 
 }

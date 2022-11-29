@@ -4,11 +4,11 @@
     "name": "ZARA"
   },
   "currency": "EUR",
-  "endDate": "2022-12-25T00:12:32Z",
+  "endDate": "2022-08-25T00:12:32Z",
   "id": 0,
-  "price": 10,
+  "price": 0,
   "priceList": 1,
   "priority": 0,
   "productId": 35455,
-  "startDate": "2022-10-25T00:15:30Z"
+  "startDate": "2022-12-25T00:15:30Z"
 }

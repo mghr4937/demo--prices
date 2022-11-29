@@ -68,6 +68,15 @@ public class PriceControllerTest {
     }
 
     @Test
+    public void whenPostPriceWithStarDateNotBeforeEndDate_thenReturn400() throws Exception {
+        var rawJson = entityTestUtil.retrieveFileContent("/price_not_before_start_date.json");
+        mvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(rawJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void whenPostPriceWithShortCurrency_thenReturn400() throws Exception {
         var rawJson = entityTestUtil.retrieveFileContent("/price_short_currency.json");
         mvc.perform(post(URL)
